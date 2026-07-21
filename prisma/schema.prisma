@@ -13,10 +13,50 @@ model Product {
   id          Int      @id @default(autoincrement())
   name        String
   description String?
-  price       Float
+  price       Float?
   category    String
   imageUrl    String?
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  icon        String?
+  showOnWeb   Boolean  @default(true)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum Role {
+  SUPERADMIN
+  ADMIN
+  OPERATOR
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  name      String
+  role      Role       @default(ADMIN)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  AuditLog  AuditLog[]
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  action    String   // e.g. "CREATE", "UPDATE", "DELETE"
+  entity    String   // e.g. "Product", "Category", "User"
+  entityId  Int?     // the ID of the affected entity
+  details   String?  // JSON string or description
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+}
+
