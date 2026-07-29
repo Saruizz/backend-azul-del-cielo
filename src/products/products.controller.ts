@@ -28,7 +28,8 @@ export class ProductsController {
     })
   }))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return { imageUrl: `http://localhost:3000/uploads/${file.filename}` };
+    const appUrl = process.env.APP_URL || 'http://localhost:3000';
+    return { imageUrl: `${appUrl}/uploads/${file.filename}` };
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
