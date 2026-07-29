@@ -11,7 +11,9 @@ RUN npm run build
 # Stage 2: Production image
 FROM node:20-alpine AS production
 WORKDIR /app
+RUN apk add --no-cache curl
 COPY package*.json prisma.config.ts* ./
+
 COPY prisma ./prisma/
 RUN npm ci
 RUN npx prisma generate
