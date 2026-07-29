@@ -20,4 +20,4 @@ RUN npx prisma generate
 COPY --from=build /app/dist ./dist
 RUN mkdir -p uploads && chmod -R 777 uploads
 EXPOSE 3000
-CMD ["sh", "-c", "npx prisma migrate deploy && (node dist/main 2>/dev/null || node dist/src/main)"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && (node dist/main 2>/dev/null || node dist/src/main)"]
