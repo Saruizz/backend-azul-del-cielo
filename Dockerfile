@@ -1,7 +1,7 @@
 # Stage 1: Build NestJS application
 FROM node:20-alpine AS build
 WORKDIR /app
-COPY package*.json ./
+COPY package*.json prisma.config.ts* ./
 COPY prisma ./prisma/
 RUN npm ci
 RUN npx prisma generate
@@ -11,7 +11,7 @@ RUN npm run build
 # Stage 2: Production image
 FROM node:20-alpine AS production
 WORKDIR /app
-COPY package*.json ./
+COPY package*.json prisma.config.ts* ./
 COPY prisma ./prisma/
 RUN npm ci
 RUN npx prisma generate
